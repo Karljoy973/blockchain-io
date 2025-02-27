@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { reactive, ref, type Reactive } from 'vue';
-import hashObject from 'hash-object'
 import BlockComponent from './components/UI/BlockComponent.vue';
-
+import BlockButton from './components/UI/BlockButton.vue';
 
 let currentValue = ref('')
 let currentHash = ref('')
@@ -21,11 +20,8 @@ const newBlock = () => {
   })
     currentValue.value =''
 }
-const validateBlock = () => {
-  blocks[blocks.length -1].hash = hashObject([{...currentHash, date: Date.now()}]), 
-  blocks[blocks.length -1].state = 'Validated'
-}
-let blockStatus = true;
+//I want to emit and event to trigger the last block state so once I create a new block
+// I cant update a previous block 
 
 </script>
 
@@ -36,9 +32,7 @@ let blockStatus = true;
       <div class="block"   v-for="block in blocks">
         <block-component :value="block.value" :state="block.state"/>
       </div>
-      <div class="container">
-        <button @click="newBlock">new block</button>  
-      </div>
+      <block-button @click="newBlock" content="New Block"></block-button>
     </span>
   </main>
 </template>

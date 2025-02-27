@@ -1,11 +1,11 @@
 <template>
-    <div class="container">
-            <button :disabled="props.state">Validate block </button>  
-          </div>
+    <!-- <div class="container">
+    </div> -->
+            <button >{{ props.content }} </button>  
 </template>
 <style scoped> 
 button {
-  width: 2em; 
+  min-width: fit-content; 
   height: 3rem;
   border-radius: 10px;
 
@@ -29,6 +29,6 @@ button:hover {
 
 <script lang="ts" setup>
 const props = defineProps({
-    state: Boolean
+    content: String,
 })
 </script>
