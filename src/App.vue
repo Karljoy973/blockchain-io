@@ -1,36 +1,30 @@
 <script setup lang="ts">
-import { reactive, ref, type Reactive } from 'vue';
+import { onUpdated, reactive, ref } from 'vue';
 import BlockComponent from './components/UI/BlockComponent.vue';
 import BlockButton from './components/UI/BlockButton.vue';
 
+let toSeal = ref(false)
 let currentValue = ref('')
 let currentHash = ref('')
-let blocks = reactive([{
-  hash: "", 
-  value: '', 
-  id: '', 
-  state: 'InCreation'
-}]); 
+let blocks: any = reactive([]); 
 const newBlock = () => {
+  
   blocks.push({
     hash: currentHash.value , 
   value: currentValue.value, 
-    id: `${blocks.length}`, 
+    id: ``, 
   state: 'InCreation'
   })
     currentValue.value =''
 }
-//I want to emit and event to trigger the last block state so once I create a new block
-// I cant update a previous block 
 
 </script>
 
 <template>
   <main>
     <span>
-      
       <div class="block"   v-for="block in blocks">
-        <block-component :value="block.value" :state="block.state"/>
+        <block-component v-model="toSeal"/>
       </div>
       <block-button @click="newBlock" content="New Block"></block-button>
     </span>

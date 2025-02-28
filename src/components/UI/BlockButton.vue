@@ -5,7 +5,8 @@
 </template>
 <style scoped> 
 button {
-  min-width: fit-content; 
+  min-width: max-content; 
+  width: min-content;
   height: 3rem;
   border-radius: 10px;
 

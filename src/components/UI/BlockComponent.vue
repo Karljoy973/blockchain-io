@@ -1,6 +1,6 @@
 <template>
     <div class="wrapper">
-          <p> id: {{ block.id }}</p>
+          <p> id: {{ blockId }}</p>
           <h2>Block</h2>
           <div class="container">
             <p>
@@ -12,25 +12,24 @@
           </div>
           <div class="container">
             value
-            <input type="text" v-model="currentValue" :disabled="!(blockState == 'InCreation')" >
+            <input type="text" v-model="currentValue" :disabled="blockState " >
           </div>
           
-          <block-button @click="validateBlock" :disabled="!(blockState == 'InCreation')" :content="buttonContent"></block-button>
+          <block-button @click="validateBlock" :disabled="blockState" :content="buttonContent"></block-button>
         </div>
 </template>
 <script setup lang="ts">
-import type { Block, BlockState } from '@/types';
 import hashObject from 'hash-object';
-import { onMounted, onUpdated, ref } from 'vue';
+import { onMounted, onUpdated, ref, watch } from 'vue';
 import BlockButton from './BlockButton.vue';
 import {v7 as uuidv7} from 'uuid'
 
 const props = defineProps({
-    value: {type : String, required: true}, 
-    state: String
+  toSeal: Boolean
 })
 
-let blockState  = ref('InCreation')
+
+let blockState  = ref(false)
 
 let currentValue = ref('')
 let currentHash = ref();
@@ -38,26 +37,20 @@ let currentHash = ref();
 
 let buttonContent = ref('Seal the Block')
 
-const validateBlock = ()=> blockState.value = 'Validated'
-onMounted(() => { currentHash = ref(hashObject([currentValue, Date.now])) })
+const validateBlock = ()=> blockState.value = true
+onMounted(() => { currentHash = ref(hashObject([currentValue, Date.now()])) })
 onUpdated(() => {
 
-  if (blockState.value != "InCreation") {
+  if(props.toSeal) blockState.value = props.toSeal
+  if (!blockState.value) {
     currentHash = currentHash.value; 
     buttonContent.value = 'Sealed Block'
-    // emit event with current block 
   }
-  else currentHash = ref(hashObject([currentValue, Date.now]))
+  else currentHash = ref(hashObject([currentValue, Date.now()]))
 })
 
 
-let block : Block = {
-    id: uuidv7(), 
-    hash: '', 
-    state: 'InCreation', 
-    value: ''
-}
-
+let blockId = uuidv7() 
 
 </script>
 <style scoped>
